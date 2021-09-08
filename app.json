@@ -1,0 +1,66 @@
+{
+    "name": "BROADCAST BOT",
+    "description": "A simple Telegram bot that can broadcast messages and media to the bot subscribers. with mongo DB support.",
+    "logo": "",
+    "keywords": [
+        "Pyrogram",
+        "bot",
+        "broadcast Bot",
+        "Telegram Bot",
+        "NacBots"
+    ],
+    "website": "https://t.me/NacBots",
+    "repository": "",
+    "success_url": "",
+    "env": {
+        "BOT_TOKEN": {
+            "description": "You Telegram Bot Token from @BotFather",
+            "value": "",
+            "required": true
+        },
+        "API_HASH": {
+            "description": "Your API Hash from my.telegram.org",
+            "value": "",
+            "required": true
+        },
+        "API_ID": {
+            "description": "Your APP ID from my.telegram.org",
+            "value": "",
+            "required": true
+        },
+        "BROADCAST_AS_COPY": {
+            "description": "Value should be True or False. Broadcast with Forward Tag or as Copy.(Without Forward Tag)",
+            "value": "True",
+            "required": false
+        },
+        "DB_URL": {
+            "description": "MongoDB.com database url",
+            "value": "",
+            "required": true
+        },
+        "DB_NAME": {
+            "description": "A database name without white space(example : broadcastbot)",
+            "value": "NACBots",
+            "required": false
+        },
+        "AUTH_USERS": {
+            "description": "Create a list of User Ids to use this bot(ADMINS). Seperate by space",
+            "value": "",
+            "required": true
+        },
+        "LOG_CHANNEL": {
+            "description": "ID of a Channel which you want to RECEIVE LOGS.",
+            "value": "",
+            "required": true
+        }
+    },
+    "buildpacks": [{
+    "url": "heroku/python"
+  }],
+    "formation": {
+        "worker": {
+            "quantity": 1,
+            "size": "free"
+        }
+    }
+}
