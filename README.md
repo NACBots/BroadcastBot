@@ -58,6 +58,5 @@ banned_users - Show Banned Users
 ```Feel free to create a pull or create a issue now and describe your issue freely.```
 
 ## Credits
-
+ - [@odysseusmax](https://github.com/odysseusmax)
  - [@NikhilEashy](https://github.com/nikhileashy)
- - [@MrBotDeveloper](https://github.com/MrBotDeveloper")
