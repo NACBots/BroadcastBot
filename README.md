@@ -14,7 +14,7 @@ A simple Telegram bot that can broadcast messages and media to the bot subscribe
 
 <p align="center">
     <a href="https://heroku.com/deploy?template=https://github.com/nacbots/BroadcastBot">
-    <img src="https://github.com/nikhileashy/justfor_testing/blob/main/buttons/herokudeploy-01.svg" alt="herokudeploy-01" border="0" height="245" width="285"></a>
+    <img src="https://github.com/nikhileashy/justfor_testing/blob/main/herokudeploy-01-cropped.svg" alt="herokudeploy-01" border="0" height="245" width="285"></a>
 </p>
 
 ## Required Configs
