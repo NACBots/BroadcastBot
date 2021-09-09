@@ -23,7 +23,7 @@ A simple Telegram bot that can broadcast messages and media to the bot subscribe
  - `API_HASH` - Get it from [telegram.org](https://my.telegram.org/auth)
  - `LOG_CHANNEL` - Log Channel ID to get new user notifications.
 	- This for some getting user info. If any new User added to DB, Bot will send Log to that Logs Channel. You can use same DB Channel ID.
- - `AUTH_USERS` - Authorised user's ID to use [Admin Commands](https://github.com/nacbots/broadcastbot-private#admin-commands) {Split 💔 with a space}.
+ - `AUTH_USERS` - Authorised user's ID to use [Admin Commands](https://github.com/nacbots/broadcastbot#admin-commands) {Split 💔 with a space}.
  - `DB_URL` - MongoDB Database URI get it from [mongodb.com](https://mongodb.com)
 	- This for Saving UserIDs. When you will Broadcast, bot will forward the Broadcast to DB Users.
 
@@ -61,3 +61,5 @@ banned_users - Show Banned Users
  - [@odysseusmax](https://github.com/odysseusmax)
  - [@NikhilEashy](https://github.com/nikhileashy)
  - [@MrBotDeveloper](https://github.com/MrBotDeveloper")
+
+<a href="https://github.com/nacbots/broadcastbot"><img src="https://i.ibb.co/FHLg02J/381823.png" alt="381823" border="0"></a>
