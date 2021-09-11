@@ -10,13 +10,6 @@ A simple Telegram bot that can broadcast messages and media to the bot subscribe
  - Get total user's count in Database. 
  - Ban and UnBan any user.
 
-## Deploy 🚀
-	
-<p align="center">
-    <a href="https://heroku.com/deploy?template=https://github.com/nacbots/BroadcastBot">
-    <img src="https://github.com/nikhileashy/justfor_testing/blob/main/herokudeploy-01-cropped.svg" alt="herokudeploy-01" border="0" height="90" width="285"></a>
-</p>
-
 ## Required Configs
  - `BOT_TOKEN` - Get from [@BotFather](https://t.me/BotFather)
  - `API_ID` - Get it from [telegram.org](https://my.telegram.org/auth)
@@ -32,14 +25,14 @@ A simple Telegram bot that can broadcast messages and media to the bot subscribe
 	- If `True` broadcast messages will be forwarder *As Copy*. If `False` broadcast messages will be forwarded with Forward Tag.
  - `DB_NAME` - [mongodb.com](https://mongodb.com) Collection name to be used.
 
-## User's Commands
+## User's Commands 😉
 
 ```
 start - Start the bot 🥲
 settings - Customise settings
 ```
 
-## Admin Commands
+## Admin Commands 🤫
 
 ```
 stats - Total User Number in Database
@@ -47,6 +40,25 @@ broadcast - Reply to Message to Broadcast
 ban_user - Ban A User with time & reason
 unban_user - Unban a User
 banned_users - Show Banned Users
+```
+
+## Deploy 🚀
+
+### Easiest Heroku Deploy 🤭
+
+<p align="center">
+    <a href="https://heroku.com/deploy?template=https://github.com/nacbots/BroadcastBot">
+    <img src="https://github.com/nikhileashy/justfor_testing/blob/main/herokudeploy-01-cropped.svg" alt="herokudeploy-01" border="0" height="90" width="285"></a>
+</p>
+
+### Host Locally 🤕
+
+```shell
+git clone https://github.com/nacbots/BroadcastBot
+cd BroadcastBot
+pip3 install -r requirements.txt
+# EDIT config.py values appropriately
+python3 main.py
 ```
 
 ## Support Group:
