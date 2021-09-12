@@ -11,7 +11,7 @@
     ],
     "website": "https://t.me/NacBots",
     "repository": "https://github.com/nacbots/BroadcastBot",
-    "success_url": "",
+    "success_url": "https://github.com/nacbots",
     "env": {
         "BOT_TOKEN": {
             "description": "You Telegram Bot Token from @BotFather",
