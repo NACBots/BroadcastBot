@@ -78,15 +78,12 @@ async def opensettings(bot, cmd):
     )
 
 
-@Bot.on_message(filters.private & filters.command("broadcast"))
+@Bot.on_message(filters.user(AUTH_USERS) & filters.private & filters.command("broadcast"))
 async def broadcast_handler_open(_, m):
-    if m.from_user.id not in AUTH_USERS:
-        await m.delete()
-        return
     if m.reply_to_message is None:
         await m.delete()
-        return
-    await broadcast(m, db)
+    else:
+        await broadcast(m, db)
 
 
 @Bot.on_message(filters.private & filters.command("stats"))
@@ -97,7 +94,7 @@ async def sts(c, m):
     await m.reply_text(
         text=f"**Total Users in Database 📂:** `{await db.total_users_count()}`\n\n**Total Users with Notification Enabled 🔔 :** `{await db.total_notif_users_count()}`",
         parse_mode="Markdown",
-        quote=True,
+        quote=True
     )
 
 
@@ -137,7 +134,7 @@ async def ban(c, m):
         traceback.print_exc()
         await m.reply_text(
             f"Error occoured ⚠️! Traceback given below\n\n`{traceback.format_exc()}`",
-            quote=True,
+            quote=True
         )
 
 
@@ -199,8 +196,6 @@ async def _banned_usrs(c, m):
         os.remove("banned-users.txt")
         return
     await m.reply_text(reply_text, True)
-
-    return
 
 
 @Bot.on_callback_query()
