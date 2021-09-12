@@ -206,9 +206,7 @@ async def _banned_usrs(c, m):
 @Bot.on_callback_query()
 async def callback_handlers(bot: Client, cb: CallbackQuery):
     user_id = cb.from_user.id
-    if "closeMeh" in cb.data:
-        await cb.message.delete(True)
-    elif "notifon" in cb.data:
+    if cb.data == "notifon":
         notif = await db.get_notif(cb.from_user.id)
         if notif is True:
             await db.set_notif(user_id, notif=False)
@@ -231,6 +229,8 @@ async def callback_handlers(bot: Client, cb: CallbackQuery):
         await cb.answer(
             f"Successfully setted notifications to {await db.get_notif(user_id)}"
         )
+    else:
+        await cb.message.delete(True)
 
 
 Bot.run()
