@@ -40,7 +40,8 @@
             "required": false
         },
         "LOG_CHANNEL": {
-            "description": "ID of a Channel which you want to RECEIVE LOGS."
+            "description": "ID of a Channel which you want to RECEIVE LOGS.",
+            "required": false
         }
     },
     "buildpacks": [{
