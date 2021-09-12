@@ -74,4 +74,4 @@ python3 main.py
  - [@NikhilEashy](https://github.com/nikhileashy)
  - [@MrBotDeveloper](https://github.com/MrBotDeveloper")
 
-<a href="https://pyrogram.org"><img src="https://i.ibb.co/FHLg02J/381823.png" alt="381823" border="0"></a>
+<a href="https://pyrogram.org"><img src="https://i.ibb.co/FHLg02J/381823.png" alt="pyrogram" border="0"></a>
