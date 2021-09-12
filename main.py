@@ -1,8 +1,8 @@
 import os
 import traceback
+import logging
 
 from pyrogram import Client
-from pyrogram import Client as Bot
 from pyrogram import StopPropagation, filters
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -25,7 +25,7 @@ async def _(bot, cmd):
 
 
 Bot = Client(
-    "MrDeveloper",
+    "BroadcastBot",
     bot_token=config.BOT_TOKEN,
     api_id=config.API_ID,
     api_hash=config.API_HASH,
@@ -40,10 +40,13 @@ async def startprivate(client, message):
         data = await client.get_me()
         BOT_USERNAME = data.username
         await db.add_user(chat_id)
-        await client.send_message(
-            LOG_CHANNEL,
-            f"#NEWUSER: \n\nNew User [{message.from_user.first_name}](tg://user?id={message.from_user.id}) started @{BOT_USERNAME} !!",
-        )
+        if LOG_CHANNEL:
+            await client.send_message(
+                LOG_CHANNEL,
+                f"#NEWUSER: \n\nNew User [{message.from_user.first_name}](tg://user?id={message.from_user.id}) started @{BOT_USERNAME} !!",
+            )
+        else:
+            logging.info(f"#NewUser :- Name : {message.from_user.first_name} ID : {message.from_user.id}")
     joinButton = InlineKeyboardMarkup(
         [
             [
@@ -85,8 +88,8 @@ async def broadcast_handler_open(_, m):
         return
     if m.reply_to_message is None:
         await m.delete()
-        return
-    await broadcast(m, db)
+    else:
+        await broadcast(m, db)
 
 
 @Bot.on_message(filters.private & filters.command("stats"))
@@ -97,7 +100,7 @@ async def sts(c, m):
     await m.reply_text(
         text=f"**Total Users in Database 📂:** `{await db.total_users_count()}`\n\n**Total Users with Notification Enabled 🔔 :** `{await db.total_notif_users_count()}`",
         parse_mode="Markdown",
-        quote=True,
+        quote=True
     )
 
 
@@ -137,7 +140,7 @@ async def ban(c, m):
         traceback.print_exc()
         await m.reply_text(
             f"Error occoured ⚠️! Traceback given below\n\n`{traceback.format_exc()}`",
-            quote=True,
+            quote=True
         )
 
 
@@ -200,15 +203,11 @@ async def _banned_usrs(c, m):
         return
     await m.reply_text(reply_text, True)
 
-    return
-
 
 @Bot.on_callback_query()
 async def callback_handlers(bot: Client, cb: CallbackQuery):
     user_id = cb.from_user.id
-    if "closeMeh" in cb.data:
-        await cb.message.delete(True)
-    elif "notifon" in cb.data:
+    if cb.data == "notifon":
         notif = await db.get_notif(cb.from_user.id)
         if notif is True:
             await db.set_notif(user_id, notif=False)
@@ -231,6 +230,8 @@ async def callback_handlers(bot: Client, cb: CallbackQuery):
         await cb.answer(
             f"Successfully setted notifications to {await db.get_notif(user_id)}"
         )
+    else:
+        await cb.message.delete(True)
 
 
 Bot.run()

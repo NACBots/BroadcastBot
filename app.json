@@ -10,22 +10,19 @@
         "NacBots"
     ],
     "website": "https://t.me/NacBots",
-    "repository": "",
-    "success_url": "",
+    "repository": "https://github.com/nacbots/BroadcastBot",
+    "success_url": "https://github.com/nacbots",
     "env": {
         "BOT_TOKEN": {
             "description": "You Telegram Bot Token from @BotFather",
-            "value": "",
             "required": true
         },
         "API_HASH": {
             "description": "Your API Hash from my.telegram.org",
-            "value": "",
             "required": true
         },
         "API_ID": {
             "description": "Your APP ID from my.telegram.org",
-            "value": "",
             "required": true
         },
         "BROADCAST_AS_COPY": {
@@ -35,28 +32,25 @@
         },
         "DB_URL": {
             "description": "MongoDB.com database url",
-            "value": "",
             "required": true
         },
         "DB_NAME": {
             "description": "A database name without white space(example : broadcastbot)",
-            "value": "NACBots",
+            "value": "BroadcastBot",
             "required": false
         },
         "AUTH_USERS": {
-            "description": "Create a list of User Ids to use this bot(ADMINS). Seperate by space",
-            "value": "",
+            "description": "Create a list of User Ids to use this bot(ADMINS). Seperate by space. At least one required.",
             "required": true
         },
         "LOG_CHANNEL": {
             "description": "ID of a Channel which you want to RECEIVE LOGS.",
-            "value": "",
-            "required": true
+            "required": false
         }
     },
-    "buildpacks": [{
-    "url": "heroku/python"
-  }],
+    "buildpacks": [
+        {"url": "heroku/python"}
+    ],
     "formation": {
         "worker": {
             "quantity": 1,
