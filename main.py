@@ -25,7 +25,7 @@ async def _(bot, cmd):
 
 
 Bot = Client(
-    "MrDeveloper",
+    "BroadcastBot",
     bot_token=config.BOT_TOKEN,
     api_id=config.API_ID,
     api_hash=config.API_HASH,
