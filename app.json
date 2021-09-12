@@ -10,7 +10,7 @@
         "NacBots"
     ],
     "website": "https://t.me/NacBots",
-    "repository": "",
+    "repository": "https://github.com/nacbots/BroadcastBot",
     "success_url": "",
     "env": {
         "BOT_TOKEN": {
