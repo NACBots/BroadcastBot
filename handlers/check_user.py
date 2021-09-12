@@ -19,10 +19,11 @@ async def handle_user_status(bot, cmd):
         data = await bot.get_me()
         BOT_USERNAME = data.username
         await db.add_user(chat_id)
-        await bot.send_message(
-            LOG_CHANNEL,
-            f"#NEWUSER: \n\nNew User [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id}) started @{BOT_USERNAME} !!",
-        )
+        if LOG_CHANNEL:
+            await bot.send_message(
+                LOG_CHANNEL,
+                f"#NEWUSER: \n\nNew User [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id}) started @{BOT_USERNAME} !!",
+            )
 
     ban_status = await db.get_ban_status(chat_id)
     if ban_status["is_banned"]:
