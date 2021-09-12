@@ -14,19 +14,13 @@
     "success_url": "https://github.com/nacbots",
     "env": {
         "BOT_TOKEN": {
-            "description": "You Telegram Bot Token from @BotFather",
-            "value": "",
-            "required": true
+            "description": "You Telegram Bot Token from @BotFather"
         },
         "API_HASH": {
-            "description": "Your API Hash from my.telegram.org",
-            "value": "",
-            "required": true
+            "description": "Your API Hash from my.telegram.org"
         },
         "API_ID": {
-            "description": "Your APP ID from my.telegram.org",
-            "value": "",
-            "required": true
+            "description": "Your APP ID from my.telegram.org"
         },
         "BROADCAST_AS_COPY": {
             "description": "Value should be True or False. Broadcast with Forward Tag or as Copy.(Without Forward Tag)",
@@ -34,24 +28,18 @@
             "required": false
         },
         "DB_URL": {
-            "description": "MongoDB.com database url",
-            "value": "",
-            "required": true
+            "description": "MongoDB.com database url"
         },
         "DB_NAME": {
             "description": "A database name without white space(example : broadcastbot)",
-            "value": "NACBots",
+            "value": "BroadcastBot",
             "required": false
         },
         "AUTH_USERS": {
-            "description": "Create a list of User Ids to use this bot(ADMINS). Seperate by space",
-            "value": "",
-            "required": true
+            "description": "Create a list of User Ids to use this bot(ADMINS). Seperate by space"
         },
         "LOG_CHANNEL": {
-            "description": "ID of a Channel which you want to RECEIVE LOGS.",
-            "value": "",
-            "required": true
+            "description": "ID of a Channel which you want to RECEIVE LOGS."
         }
     },
     "buildpacks": [{
