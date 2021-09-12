@@ -1,8 +1,8 @@
 import os
 import traceback
+import logging
 
 from pyrogram import Client
-from pyrogram import Client as Bot
 from pyrogram import StopPropagation, filters
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -45,6 +45,8 @@ async def startprivate(client, message):
                 LOG_CHANNEL,
                 f"#NEWUSER: \n\nNew User [{message.from_user.first_name}](tg://user?id={message.from_user.id}) started @{BOT_USERNAME} !!",
             )
+        else:
+            logging.info(f"#NewUser :- Name : {cmd.from_user.first_name} ID : {cmd.from_user.id}")
     joinButton = InlineKeyboardMarkup(
         [
             [
