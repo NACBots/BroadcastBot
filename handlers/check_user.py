@@ -4,6 +4,8 @@
 import datetime
 
 import config
+import logging
+
 from handlers.database import Database
 
 DB_URL = config.DB_URL
@@ -11,7 +13,6 @@ DB_NAME = config.DB_NAME
 LOG_CHANNEL = config.LOG_CHANNEL
 
 db = Database(DB_URL, DB_NAME)
-
 
 async def handle_user_status(bot, cmd):
     chat_id = cmd.from_user.id
@@ -24,6 +25,8 @@ async def handle_user_status(bot, cmd):
                 LOG_CHANNEL,
                 f"#NEWUSER: \n\nNew User [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id}) started @{BOT_USERNAME} !!",
             )
+        else:
+            logging.info(f"#NewUser :- Name : {cmd.from_user.first_name} ID : {cmd.from_user.id}")
 
     ban_status = await db.get_ban_status(chat_id)
     if ban_status["is_banned"]:
