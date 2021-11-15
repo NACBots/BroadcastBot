@@ -19,11 +19,6 @@ DB_NAME = config.DB_NAME
 db = Database(DB_URL, DB_NAME)
 
 
-@Bot.on_message(filters.private)
-async def _(bot, cmd):
-    await handle_user_status(bot, cmd)
-
-
 Bot = Client(
     "BroadcastBot",
     bot_token=config.BOT_TOKEN,
@@ -31,6 +26,9 @@ Bot = Client(
     api_hash=config.API_HASH,
 )
 
+@Bot.on_message(filters.private)
+async def _(bot, cmd):
+    await handle_user_status(bot, cmd)
 
 @Bot.on_message(filters.command("start") & filters.private)
 async def startprivate(client, message):
