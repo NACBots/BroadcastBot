@@ -4,6 +4,7 @@ A simple Telegram bot that can broadcast messages and media to the bot subscribe
 [![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=NACBots&repo=BroadcastBot&theme=flag-india)](https://github.com/nacbots/broadcastbot&bg_color=#24292F)
 
 ## Features
+
  - Support [mongodb.com](https://mongodb.com) database 📁 for user's record 📹.<p align="center">
  - User's can choose whether to enable Broadcast messages or not using `/settings` commands.
  - Logs New User's in any channel.
