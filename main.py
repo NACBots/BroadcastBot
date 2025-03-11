@@ -82,9 +82,13 @@ async def opensettings(bot, cmd):
 @Bot.on_message(filters.private & filters.command("broadcast"))
 async def broadcast_handler_open(_, m):
     if m.from_user.id not in AUTH_USERS:
+        print("Not Authorized")
         await m.delete()
         return
     if m.reply_to_message is None:
+        await m.reply_text(
+            "Reply to a message to broadcast it to all subscribers", quote=True
+        )
         await m.delete()
     else:
         await broadcast(m, db)
@@ -230,5 +234,5 @@ async def callback_handlers(bot: Client, cb: CallbackQuery):
     else:
         await cb.message.delete(True)
 
-
+print("Bot Started...")
 Bot.run()
