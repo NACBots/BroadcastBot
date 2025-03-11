@@ -1,4 +1,4 @@
-# 𝘽𝙧𝙤𝙖𝙙𝙘𝙖𝙨𝙩 𝘽𝙤𝙩
+# Broadcast Bot v2
 A simple Telegram bot that can broadcast messages and media to the bot subscribers using [MongoDB](https://mongodb.com).  
 
 [![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=NACBots&repo=BroadcastBot&theme=flag-india)](https://github.com/nacbots/broadcastbot&bg_color=#24292F)  
