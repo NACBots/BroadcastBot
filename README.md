@@ -8,7 +8,7 @@ A simple Telegram bot that can broadcast messages and media to the bot subscribe
 - **Live Broadcast Status** – Real-time progress updates to track your broadcasts.  
 - **PyroBlack Migration** – Switched from **Pyrogram** to **PyroBlack** for improved performance and efficiency.  
 - **New Config Variables:**  
-  - `MAX_CONCURRENT` – Maximum concurrent message sends (Default: 15, can be set up to 2000 for paid broadcasts).  
+  - `MAX_CONCURRENT` – Maximum concurrent message sends (Default: 15, can be set up to 1000 for paid broadcasts).  
   - `UPDATE_INTERVAL` – Update interval in seconds to avoid flood waits (Default: 2).  
 
 ## Features  

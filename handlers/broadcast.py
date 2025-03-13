@@ -34,7 +34,7 @@ async def send_msg(user_id, message, semaphore):
                 await message.copy(chat_id=user_id)
             return 200, None
         except FloodWait as e:
-            await asyncio.sleep(e.x)
+            await asyncio.sleep(e.value)
             return await send_msg(user_id, message, semaphore)
         except InputUserDeactivated:
             return 400, f"{user_id} : deactivated\n"
