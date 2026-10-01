@@ -10,6 +10,7 @@ import config
 from handlers.broadcast import broadcast
 from handlers.check_user import handle_user_status
 from handlers.database import Database
+from handlers.group_broadcast import group_broadcast
 
 LOG_CHANNEL = config.LOG_CHANNEL
 AUTH_USERS = config.AUTH_USERS
@@ -55,7 +56,7 @@ async def startprivate(client, message):
             ]
         ]
     )
-    welcomed = f"Hey <b>{message.from_user.first_name}</b>\nI'm a simple Telegram bot that can broadcast messages and media to the bot subscribers. Made by @NACBOTS.\n\n 🎚 use /settings"
+    welcomed = f"Hey <b>{message.from_user.first_name}</b>\nI'm a Telegram bot that can broadcast messages and media to bot subscribers <b>and</b> to multiple groups/channels.\n\n 🎚 use /settings\n 📣 /broadcast — send to all <b>users</b>\n 📢 /gbroadcast — send to all <b>groups</b>\n 🗂 /groups — list target groups"
     await message.reply_text(welcomed, reply_markup=joinButton)
     raise StopPropagation
 
@@ -100,9 +101,178 @@ async def sts(c, m):
         await m.delete()
         return
     await m.reply_text(
-        text=f"**Total Users in Database 📂:** `{await db.total_users_count()}`\n\n**Total Users with Notification Enabled 🔔 :** `{await db.total_notif_users_count()}`",
+        text=f"**Total Users in Database 📂:** `{await db.total_users_count()}`\n\n"
+             f"**Total Users with Notification Enabled 🔔 :** `{await db.total_notif_users_count()}`\n\n"
+             f"**Total Groups/Channels Registered 🗂 :** `{await db.total_groups_count()}`",
         quote=True
     )
+
+
+# ---------------------------------------------------------------------------
+# Multi-group / multi-channel broadcasting
+# ---------------------------------------------------------------------------
+
+
+@Bot.on_message(filters.command("addgroup"))
+async def addgroup_handler(_, m):
+    """Register a group/channel as a broadcast target.
+
+    Works both in private (`/addgroup -1001234567890`) and inside a group
+    (just send `/addgroup` there).
+    """
+    if m.from_user.id not in AUTH_USERS:
+        await m.delete()
+        return
+
+    if m.chat.type in ("group", "supergroup", "channel"):
+        chat = m.chat
+    elif len(m.command) > 1:
+        chat_id = m.command[1]
+        try:
+            chat = await _.get_chat(chat_id)
+        except Exception:
+            await m.reply_text(
+                f"⚠️ Cannot resolve chat `{chat_id}`.\n"
+                f"`{traceback.format_exc()}`",
+                quote=True,
+            )
+            return
+    else:
+        await m.reply_text(
+            "Usage:\n\n"
+            "• Inside a group: just send `/addgroup`\n"
+            "• In private: `/addgroup <chat_id>` (e.g. `/addgroup -1001234567890`)",
+            quote=True,
+        )
+        return
+
+    await db.add_group(
+        chat_id=chat.id,
+        title=getattr(chat, "title", "") or "",
+        username=getattr(chat, "username", "") or "",
+        chat_type=str(chat.type),
+    )
+    await m.reply_text(
+        f"✅ Registered for broadcast:\n\n"
+        f"**Title:** {getattr(chat, 'title', chat.id)}\n"
+        f"**Chat ID:** `{chat.id}`\n"
+        f"**Type:** `{chat.type}`\n\n"
+        f"Total targets: `{await db.total_groups_count()}`",
+        quote=True,
+    )
+
+
+@Bot.on_message(filters.command("delgroup"))
+async def delgroup_handler(_, m):
+    if m.from_user.id not in AUTH_USERS:
+        await m.delete()
+        return
+
+    if m.chat.type in ("group", "supergroup", "channel"):
+        chat_id = m.chat.id
+    elif len(m.command) > 1:
+        try:
+            chat_id = int(m.command[1])
+        except ValueError:
+            await m.reply_text("⚠️ chat_id must be a number.", quote=True)
+            return
+    else:
+        await m.reply_text(
+            "Usage:\n\n• Inside a group: `/delgroup`\n• In private: `/delgroup <chat_id>`",
+            quote=True,
+        )
+        return
+
+    await db.delete_group(chat_id)
+    await m.reply_text(
+        f"🗑 Removed `{chat_id}` from broadcast targets.\n"
+        f"Remaining targets: `{await db.total_groups_count()}`",
+        quote=True,
+    )
+
+
+@Bot.on_message(filters.command("groups"))
+async def groups_handler(_, m):
+    if m.from_user.id not in AUTH_USERS:
+        await m.delete()
+        return
+
+    cursor = await db.get_all_groups()
+    groups = await cursor.to_list(length=None)
+    if not groups:
+        await m.reply_text(
+            "No group/channel registered yet.\n\n"
+            "Add the bot to a group (it auto-registers) or use `/addgroup`.",
+            quote=True,
+        )
+        return
+
+    lines = []
+    for i, g in enumerate(groups, 1):
+        title = g.get("title") or "(no title)"
+        username = f" @{g['username']}" if g.get("username") else ""
+        lines.append(f"{i}. {title}{username}\n    `{g['chat_id']}` · {g.get('chat_type')}")
+
+    await m.reply_text(
+        f"**🗂 Broadcast targets ({len(groups)}):**\n\n" + "\n".join(lines),
+        quote=True,
+    )
+
+
+@Bot.on_message(filters.command("gbroadcast"))
+async def gbroadcast_handler(_, m):
+    """Broadcast the replied-to message to every registered group/channel."""
+    if m.from_user.id not in AUTH_USERS:
+        try:
+            await m.delete()
+        except Exception:
+            pass
+        return
+
+    if m.reply_to_message is None:
+        await m.reply_text(
+            "Reply to a message with `/gbroadcast` to send it to **all registered "
+            "groups/channels**.\n\n"
+            f"Current targets: `{await db.total_groups_count()}`\n"
+            "Manage them with `/addgroup`, `/delgroup`, `/groups`.",
+            quote=True,
+        )
+        return
+
+    await group_broadcast(m, db)
+
+
+@Bot.on_message(filters.new_chat_members)
+async def auto_register_group(_, m):
+    """Auto-register any group/channel the bot itself is added to."""
+    me = await _.get_me()
+    for member in m.new_chat_members:
+        if member.id == me.id:
+            chat = m.chat
+            await db.add_group(
+                chat_id=chat.id,
+                title=getattr(chat, "title", "") or "",
+                username=getattr(chat, "username", "") or "",
+                chat_type=str(chat.type),
+            )
+            try:
+                await m.reply_text(
+                    f"✅ Thanks for adding me! This chat is now a broadcast target "
+                    f"(`{chat.id}`).\n\n"
+                    f"Admins can use `/gbroadcast` (reply to a message) to push "
+                    f"content here and to every other registered group."
+                )
+            except Exception:
+                pass
+            break
+
+
+@Bot.on_message(filters.left_chat_member)
+async def auto_unregister_group(_, m):
+    """Deactivate a chat once the bot is removed from it."""
+    me = await _.get_me()
+    if m.left_chat_member and m.left_chat_member.id == me.id:
+        await db.set_group_active(m.chat.id, False)
 
 
 @Bot.on_message(filters.private & filters.command("ban_user"))

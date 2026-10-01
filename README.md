@@ -83,7 +83,52 @@ python3 main.py
 ## Credits  
 
 - [@NikhilEashy](https://github.com/nikhileashy)  
-- [@MrBotDeveloper](https://github.com/MrBotDeveloper)  
+- [@MrBotDeveloper](https://github.com/MrBotDeveloper)
+
+---
+
+# ➕ Multi-Group Broadcasting (local add-on)
+
+The upstream bot can only broadcast to **bot users** (subscribers).
+This build adds a second channel: broadcast one message to **every group
+and channel** the bot has been added to.
+
+### Commands
+
+| Command | Where | What it does |
+| --- | --- | --- |
+| `/broadcast` | private, admin | Reply to a message → send it to all **users** (upstream feature) |
+| `/gbroadcast` | private or group, admin | Reply to a message → send it to all **registered groups/channels** |
+| `/addgroup` | group or private | Register this group (in-group) or `/addgroup -1001234567890` (private) |
+| `/delgroup` | group or private | Remove this group, or `/delgroup -1001234567890` |
+| `/groups` | private, admin | List all registered broadcast targets |
+| `/stats` | private, admin | Users / notified users / registered groups counts |
+
+### How groups get registered
+
+1. **Automatic** — add the bot to a group or channel and it registers itself
+   (and removes itself when it is kicked).
+2. **Manual** — send `/addgroup` inside the group, or `/addgroup <chat_id>` in private.
+
+The bot must be an **admin** in the target group/channel with permission to post.
+Chats that return `400` (kicked / deleted / invalid id) are automatically
+deactivated so they are skipped on the next run.
+
+A run ends with an in-chat progress message; if any target failed, a
+`group_broadcast.txt` log listing the failing chat ids is delivered as a document.
+
+### Running it locally
+
+```shell
+./start-mongo.sh      # first time: see the script header to download mongod
+cp .env.example .env  # then fill in BOT_TOKEN / API_ID / API_HASH / AUTH_USERS
+./run.sh              # start the bot
+./run.sh --check      # run the self-checks only (no Telegram connection needed)
+./stop-mongo.sh       # stop the local MongoDB
+```
+
+`selfcheck.py` exercises the group registry and the send worker against a real
+MongoDB; `selfcheck_handlers.py` verifies every handler still registers.  
 
 <a href="https://pyrogram.org"><img src="https://i.ibb.co/SVLD5k8/Document-1222546317.png" alt="pyrogram" border="0"></a>  
 

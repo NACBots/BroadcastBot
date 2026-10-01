@@ -10,6 +10,8 @@ class Database:
         self._client = motor.motor_asyncio.AsyncIOMotorClient(uri)
         self.db = self._client[database_name]
         self.col = self.db.users
+        # groups / channels the bot has been added to (used for multi-chat broadcast)
+        self.groups = self.db.groups
 
     def new_user(self, id):
         return dict(
@@ -89,3 +91,43 @@ class Database:
     async def total_notif_users_count(self):
         count = await self.col.count_documents({"notif": True})
         return count
+
+    # ------------------------------------------------------------------
+    # Groups / Channels (multi-chat broadcast support)
+    # ------------------------------------------------------------------
+
+    def new_group(self, chat_id, title="", username="", chat_type="group"):
+        return dict(
+            chat_id=int(chat_id),
+            title=title or "",
+            username=username or "",
+            chat_type=chat_type or "group",
+            added_on=datetime.date.today().isoformat(),
+            active=True,
+        )
+
+    async def add_group(self, chat_id, title="", username="", chat_type="group"):
+        """Add (or re-activate) a group/channel as a broadcast target."""
+        await self.groups.update_one(
+            {"chat_id": int(chat_id)},
+            {"$set": self.new_group(chat_id, title, username, chat_type)},
+            upsert=True,
+        )
+
+    async def delete_group(self, chat_id):
+        await self.groups.delete_many({"chat_id": int(chat_id)})
+
+    async def is_group_exist(self, chat_id):
+        group = await self.groups.find_one({"chat_id": int(chat_id)})
+        return True if group else False
+
+    async def get_all_groups(self):
+        return self.groups.find({"active": True})
+
+    async def total_groups_count(self):
+        return await self.groups.count_documents({"active": True})
+
+    async def set_group_active(self, chat_id, active):
+        await self.groups.update_one(
+            {"chat_id": int(chat_id)}, {"$set": {"active": bool(active)}}
+        )
